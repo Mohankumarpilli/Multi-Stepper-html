@@ -105,6 +105,8 @@ function validateInputs() {
 
     if (nameInput.value.trim() === '') {
         nameError.style.visibility = 'visible';
+        nameInput.classList.add('border-red-500'); 
+        nameInput.classList.remove('focus:border-blue-500');
         isValid = false; 
     } else {
         nameError.style.visibility = 'hidden';
@@ -256,39 +258,39 @@ function updatePlanDetails(planSelected) {
 
 let currentPage = 4;
 function goToPage(pageNumber) {
-  count=pageNumber
-  updateStep(count);
-  document.querySelectorAll(".step-box").forEach((page, index) => {
-    if (index === pageNumber - 1) {
-    } else {
-    }
-  });
+    count = pageNumber;
+  updateStep(pageNumber);
+  hidingPages(pageNumber);
 }
 
 changePlanButton.addEventListener("click", () => {
   goToPage(2); 
 });
 
-
-
 function renderAddOns(selectedServices) {
+
     addOnContainer.innerHTML = "";
+    addOnContainer.classList.add('flex-col');
+
     if (Object.keys(selectedServices).length === 0) {
         selectedPlan.style.border = "none";
-        return; 
-    } else {
+        return;
     }
+
     for (const [serviceName, servicePrice] of Object.entries(selectedServices)) {
-      const addOnClone = addOnTemplate.cloneNode(true);
-      console.log(addOnClone); 
-  
-      addOnClone.querySelector(".add-on-name").textContent = serviceName;
-      addOnClone.querySelector(".add-on-price").textContent = servicePrice;
-  
-      addOnContainer.appendChild(addOnClone);
+        const addOnClone = addOnTemplate.cloneNode(true);
+        addOnClone.classList.remove("hidden"); 
+
+        const nameElement = addOnClone.querySelector(".add-on-name");
+        const priceElement = addOnClone.querySelector(".add-on-price");
+        const parent = nameElement.parentElement;
+        parent.classList.add('flex','flex-row');
+        if (nameElement) nameElement.textContent = serviceName;
+        if (priceElement) priceElement.textContent = servicePrice;
+
+        addOnContainer.appendChild(addOnClone);
     }
 }
-
 
 
 function calculateTotal(planSelected, selectedServices) {
